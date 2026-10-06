@@ -1,59 +1,55 @@
 # World Bank ETL Pipeline
 
-Data-engineering project that extracts economic indicator data from the World Bank API, transforms it into an analytics-ready model, and loads it to CSV or PostgreSQL.
+I built this project to practice a small but complete data-pipeline pattern using a public API: **extract data, normalize it, calculate a derived field, and load the result somewhere useful**.
 
-## Architecture
+I chose the World Bank API because it is public, easy to query without API keys, and gives the project a real external data source instead of another generated CSV.
+
+## Pipeline
+
 ```text
-World Bank API / sample JSON
-          |
-       Extract
-          |
-       Transform
-   clean + dedupe + YoY
-          |
-        Load
-   CSV / PostgreSQL
+World Bank API / local sample JSON
+            |
+         Extract
+            |
+         Transform
+   normalize + dedupe + YoY
+            |
+          Load
+      CSV / PostgreSQL
 ```
 
-## Features
-- Public REST API extraction with request validation
-- Offline sample mode for reproducible runs
-- Data cleaning and schema normalization with pandas
-- Duplicate handling and year-over-year calculation
-- PostgreSQL loading through SQLAlchemy
-- Docker Compose PostgreSQL environment
-- Pytest data-quality test
+## What the pipeline does
 
-## Tools
-**Python · REST APIs · pandas · PostgreSQL · SQLAlchemy · Docker · pytest · ETL**
+- calls the World Bank REST API with basic request validation
+- supports an offline sample mode so the project can still be run without network access
+- normalizes the API response into a tabular structure
+- removes duplicate rows
+- calculates year-over-year change
+- writes the transformed data to CSV
+- optionally loads the result to PostgreSQL with SQLAlchemy
+- includes a simple pytest check for the transformation step
 
-## Repository structure
-```text
-world-bank-etl-pipeline/
-├── src/
-│   ├── extract.py
-│   ├── transform.py
-│   ├── load.py
-│   └── pipeline.py
-├── data/raw/sample_world_bank.json
-├── sql/schema.sql
-├── tests/test_transform.py
-├── docker-compose.yml
-└── README.md
-```
+## Why I added an offline mode
 
-## Run locally — no database required
+A portfolio project should still be reproducible if an external API is slow or temporarily unavailable. The sample JSON gives me a stable local input for testing the transform and load logic while keeping the live API option available.
+
+## Run locally
+
 ```bash
 pip install -r requirements.txt
 python src/pipeline.py
 ```
 
-## Run against the live World Bank API
+This uses the local sample input and does not require a database.
+
+## Run against the live API
+
 ```bash
 python src/pipeline.py --live
 ```
 
 ## PostgreSQL mode
+
 ```bash
 docker compose up -d
 cp .env.example .env
@@ -61,5 +57,30 @@ cp .env.example .env
 python src/pipeline.py --live --postgres
 ```
 
-## What this demonstrates
-A clean extract-transform-load workflow, API ingestion, relational loading, reproducibility, data-quality checks, and a foundation that can later be extended with dbt and Airflow.
+## Project structure
+
+```text
+world-bank-etl-pipeline/
+├── data/raw/sample_world_bank.json
+├── src/
+│   ├── extract.py
+│   ├── transform.py
+│   ├── load.py
+│   └── pipeline.py
+├── sql/schema.sql
+├── tests/test_transform.py
+├── docker-compose.yml
+├── .env.example
+├── requirements.txt
+└── README.md
+```
+
+## Stack
+
+Python · REST APIs · pandas · PostgreSQL · SQLAlchemy · Docker · pytest
+
+## What I would add in a production version
+
+This is intentionally a small pipeline, not a production orchestration system. The next pieces I would add are retries/backoff, structured logging, incremental loads, stronger schema tests, scheduling, and lineage/transform management.
+
+That is where tools such as **Airflow** and **dbt** would fit; they are not presented here as if they are already implemented.
