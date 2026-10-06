@@ -23,11 +23,12 @@ World Bank API / local sample JSON
 - calls the World Bank REST API with basic request validation
 - supports an offline sample mode so the project can still be run without network access
 - normalizes the API response into a tabular structure
-- removes duplicate rows
+- removes duplicate business keys
 - calculates year-over-year change
 - writes the transformed data to CSV
 - optionally loads the result to PostgreSQL with SQLAlchemy
-- includes a simple pytest check for the transformation step
+- uses a PostgreSQL **upsert** on country/year/indicator so rerunning the same data does not create duplicate rows
+- includes pytest checks for expected fields and duplicate business keys
 
 ## Why I added an offline mode
 
@@ -56,6 +57,8 @@ cp .env.example .env
 # export DATABASE_URL from .env
 python src/pipeline.py --live --postgres
 ```
+
+The loader creates the table from `sql/schema.sql` if needed and then inserts or updates rows using `(country_code, year, indicator_code)` as the business key.
 
 ## Project structure
 
