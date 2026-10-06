@@ -1,0 +1,44 @@
+[
+  {
+    "countryiso3code": "USA",
+    "date": "2023",
+    "value": 27720709000000,
+    "indicator": {"id": "NY.GDP.MKTP.CD", "value": "GDP (current US$)"},
+    "country": {"value": "United States"}
+  },
+  {
+    "countryiso3code": "CAN",
+    "date": "2023",
+    "value": 2140086400000,
+    "indicator": {"id": "NY.GDP.MKTP.CD", "value": "GDP (current US$)"},
+    "country": {"value": "Canada"}
+  },
+  {
+    "countryiso3code": "MEX",
+    "date": "2023",
+    "value": 1788899700000,
+    "indicator": {"id": "NY.GDP.MKTP.CD", "value": "GDP (current US$)"},
+    "country": {"value": "Mexico"}
+  },
+  {
+    "countryiso3code": "USA",
+    "date": "2022",
+    "value": 26006893000000,
+    "indicator": {"id": "NY.GDP.MKTP.CD", "value": "GDP (current US$)"},
+    "country": {"value": "United States"}
+  },
+  {
+    "countryiso3code": "CAN",
+    "date": "2022",
+    "value": 2161483400000,
+    "indicator": {"id": "NY.GDP.MKTP.CD", "value": "GDP (current US$)"},
+    "country": {"value": "Canada"}
+  },
+  {
+    "countryiso3code": "MEX",
+    "date": "2022",
+    "value": 1465600000000,
+    "indicator": {"id": "NY.GDP.MKTP.CD", "value": "GDP (current US$)"},
+    "country": {"value": "Mexico"}
+  }
+]
