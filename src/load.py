@@ -44,15 +44,26 @@ def load_csv(df, path="data/processed/indicators.csv"):
     return output_path
 
 
+def _records_with_nulls(df):
+    records = []
+
+    for row in df.to_dict(orient="records"):
+        records.append(
+            {
+                key: None if pd.isna(value) else value
+                for key, value in row.items()
+            }
+        )
+
+    return records
+
+
 def load_postgres(df):
     database_url = os.environ["DATABASE_URL"]
     engine = create_engine(database_url)
     schema_sql = Path("sql/schema.sql").read_text()
 
-    records = (
-        df.where(pd.notna(df), None)
-        .to_dict(orient="records")
-    )
+    records = _records_with_nulls(df)
 
     if not records:
         return 0
